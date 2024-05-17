@@ -1,3 +1,5 @@
+package DataTypes;
+
 public class Bit {
     /////////////////////////////
     // Class instance variable //

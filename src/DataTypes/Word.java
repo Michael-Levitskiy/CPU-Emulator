@@ -1,3 +1,5 @@
+package DataTypes;
+
 public class Word {
     /////////////////////////////
     // Class instance variable //

@@ -1,3 +1,5 @@
+import DataTypes.*;
+
 public class ALU {
     //////////////////////////////
     // Class Instance Variables //

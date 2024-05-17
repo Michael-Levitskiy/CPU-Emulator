@@ -1,3 +1,5 @@
+import DataTypes.*;
+
 public class InstructionCache {
     //////////////////////////////
     // Class Instance Variables //

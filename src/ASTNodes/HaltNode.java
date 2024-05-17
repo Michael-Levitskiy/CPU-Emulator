@@ -1,3 +1,5 @@
+package ASTNodes;
+
 public class HaltNode extends StatementNode{
     
     /**

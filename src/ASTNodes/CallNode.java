@@ -1,8 +1,11 @@
+package ASTNodes;
+
 import java.util.HashMap;
+import DataTypes.*;
 
 public class CallNode extends StatementNode {
     
-    enum BOP {eq, neq, lt, ge, gt, le};
+    public enum BOP {eq, neq, lt, ge, gt, le};
 
     //////////////////////////////
     // Class Instance Variables //

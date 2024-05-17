@@ -1,3 +1,5 @@
+import DataTypes.*;
+
 public class Processor {
     //////////////////////////////
     // Class Instance Variables //

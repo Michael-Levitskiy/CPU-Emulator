@@ -1,3 +1,5 @@
+import DataTypes.*;
+
 public class MainMemory {
     /////////////////////////////
     // Class Instance Variable //

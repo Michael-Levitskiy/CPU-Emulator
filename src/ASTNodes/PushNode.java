@@ -1,35 +1,40 @@
-import java.util.HashMap;
+package ASTNodes;
 
-public class MathNode extends StatementNode{
+import java.util.HashMap;
+import DataTypes.*;
+
+public class PushNode extends StatementNode {
     
-    enum MOP {add, sub, mult, and, or, xor, not, leftShift, rightShift};
+    public enum MOP {add, sub, mult, and, or, xor, not, leftShift, rightShift};
 
     //////////////////////////////
     // Class Instance Variables //
     //////////////////////////////
-    private final HashMap<MathNode.MOP, Word> functions;
+    private final HashMap<PushNode.MOP, Word> functions;
     private final MOP mop;
     private final int Rd;
     private final int Rs1;
     private final int Rs2;
+    private final int imm;
     
 
     /**
-     * Constructor for MATH
-     * If rs2 == -1, then it's 2R, otherwise 3R
+     * Constructor
      * @param mop
      * @param rd
      * @param rs1
      * @param rs2
+     * @param imm
      */
-    public MathNode(MathNode.MOP mop, int rd, int rs1, int rs2) {
+    public PushNode(PushNode.MOP mop, int rd, int rs1, int rs2, int imm) {
         this.mop = mop;
         Rd = rd;
         Rs1 = rs1;
         Rs2 = rs2;
+        this.imm = imm;
         this.functions = this.setHashMap();
     }
-
+    
 
     ///////////////
     // Accessors //
@@ -37,19 +42,19 @@ public class MathNode extends StatementNode{
     public MOP getMop() {
         return mop;
     }
-
     public int getRd() {
         return Rd;
     }
-
     public int getRs1() {
         return Rs1;
     }
-
     public int getRs2() {
         return Rs2;
     }
-    
+    public int getImm() {
+        return imm;
+    }
+
 
     /**
      * Overridden toString() method
@@ -57,24 +62,35 @@ public class MathNode extends StatementNode{
     @Override
     public String toString() {
         Word rd = new Word();
-        rd.set(this.Rd);
-        Word rs1 = new Word();
-        rs1.set(this.Rs1);
-        Word function = functions.get(this.mop);
+        rd.set(Rd);
+        Word mop = this.functions.get(this.mop);
 
-        if (Rs2 == -1){     // if Rs2 == -1, then 2R instruction
+        if (this.Rs1 == -1){        // if Rs1 = -1, then DestOnly and get immediate
             Word opCode = new Word();
-            opCode.set(0b00011);
-            Word instruction = opCode.or(rd.leftShift(5)).or(function.leftShift(10))
+            opCode.set(0b01101);
+            Word immediate = new Word();
+            immediate.set(this.imm);
+            Word instruction = opCode.or(rd.leftShift(5)).or(mop.leftShift(10))
+                                .or(immediate.leftShift(14));
+            return this.toBits(instruction);
+        }
+        else if(this.Rs2 == -1){    // if Rs2 = -1, then 2R
+            Word opCode = new Word();
+            opCode.set(0b01111);
+            Word rs1 = new Word();
+            rs1.set(this.Rs1);
+            Word instruction = opCode.or(rd.leftShift(5)).or(mop.leftShift(10))
                                 .or(rs1.leftShift(14));
             return this.toBits(instruction);
         }
-        else{               // else, 3R instruction
+        else{                       // else 3R
+            Word opCode = new Word();
+            opCode.set(0b01110);
+            Word rs1 = new Word();
+            rs1.set(this.Rs1);
             Word rs2 = new Word();
             rs2.set(this.Rs2);
-            Word opCode = new Word();
-            opCode.set(0b00010);
-            Word instruction = opCode.or(rd.leftShift(5)).or(function.leftShift(10))
+            Word instruction = opCode.or(rd.leftShift(5)).or(mop.leftShift(10))
                                 .or(rs2.leftShift(14)).or(rs1.leftShift(19));
             return this.toBits(instruction);
         }
@@ -88,53 +104,53 @@ public class MathNode extends StatementNode{
      * Method to fill the hashmap with the MOP and their corresponding bit values
      * @return
      */
-    private HashMap<MathNode.MOP, Word> setHashMap(){
-        HashMap<MathNode.MOP, Word> functions = new HashMap<>();
+    private HashMap<PushNode.MOP, Word> setHashMap(){
+        HashMap<PushNode.MOP, Word> functions = new HashMap<>();
         
         // add AND
         Word andFunction = new Word();
         andFunction.set(8);
-        functions.put(MathNode.MOP.and, andFunction);
+        functions.put(PushNode.MOP.and, andFunction);
 
         // add OR
         Word orFunction = new Word();
         orFunction.set(9);
-        functions.put(MathNode.MOP.or, orFunction);
+        functions.put(PushNode.MOP.or, orFunction);
 
         // add XOR
         Word xorFunction = new Word();
         xorFunction.set(10);
-        functions.put(MathNode.MOP.xor, xorFunction);
+        functions.put(PushNode.MOP.xor, xorFunction);
 
         // add NOT
         Word notFunction = new Word();
         notFunction.set(11);
-        functions.put(MathNode.MOP.not, notFunction);
+        functions.put(PushNode.MOP.not, notFunction);
 
         // add leftShift
         Word lsFunction = new Word();
         lsFunction.set(12);
-        functions.put(MathNode.MOP.leftShift, lsFunction);
+        functions.put(PushNode.MOP.leftShift, lsFunction);
 
         // add rightShift
         Word rsFunction = new Word();
         rsFunction.set(13);
-        functions.put(MathNode.MOP.rightShift, rsFunction);
+        functions.put(PushNode.MOP.rightShift, rsFunction);
 
         // add ADD
         Word addFunction = new Word();
         addFunction.set(14);
-        functions.put(MathNode.MOP.add, addFunction);
+        functions.put(PushNode.MOP.add, addFunction);
 
         // add SUB
         Word subFunction = new Word();
         subFunction.set(15);
-        functions.put(MathNode.MOP.sub, subFunction);
+        functions.put(PushNode.MOP.sub, subFunction);
 
         // add MULT
         Word multFunction = new Word();
         multFunction.set(7);
-        functions.put(MathNode.MOP.mult, multFunction);
+        functions.put(PushNode.MOP.mult, multFunction);
 
         return functions;
     }

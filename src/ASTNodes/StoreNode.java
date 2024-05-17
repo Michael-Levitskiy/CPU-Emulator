@@ -1,4 +1,8 @@
-public class PeekNode extends StatementNode{
+package ASTNodes;
+
+import DataTypes.*;
+
+public class StoreNode extends StatementNode{
     
     //////////////////////////////
     // Class Instance Variables //
@@ -17,14 +21,14 @@ public class PeekNode extends StatementNode{
      * @param rs2
      * @param imm
      */
-    public PeekNode(int rd, int rs1, int rs2, int imm) {
+    public StoreNode(int rd, int rs1, int rs2, int imm) {
         Rd = rd;
         Rs1 = rs1;
         Rs2 = rs2;
         this.imm = imm;
     }
-    
 
+    
     ///////////////
     // Accessors //
     ///////////////
@@ -49,12 +53,20 @@ public class PeekNode extends StatementNode{
     public String toString() {
         Word rd = new Word();
         rd.set(Rd);
-        Word rs1 = new Word();
-        rs1.set(this.Rs1);
-        
-        if(this.Rs2 == -1){    // if Rs2 = -1, then 2R
+
+        if (this.Rs1 == -1){        // if Rs1 = -1, then DestOnly and get immediate
             Word opCode = new Word();
-            opCode.set(0b11011);
+            opCode.set(0b10101);
+            Word immediate = new Word();
+            immediate.set(this.imm);
+            Word instruction = opCode.or(rd.leftShift(5)).or(immediate.leftShift(14));
+            return this.toBits(instruction);
+        }
+        else if(this.Rs2 == -1){    // if Rs2 = -1, then 2R
+            Word opCode = new Word();
+            opCode.set(0b10111);
+            Word rs1 = new Word();
+            rs1.set(this.Rs1);
             Word immediate = new Word();
             immediate.set(this.imm);
             Word instruction = opCode.or(rd.leftShift(5)).or(rs1.leftShift(14))
@@ -63,7 +75,9 @@ public class PeekNode extends StatementNode{
         }
         else{                       // else 3R
             Word opCode = new Word();
-            opCode.set(0b11010);
+            opCode.set(0b10110);
+            Word rs1 = new Word();
+            rs1.set(this.Rs1);
             Word rs2 = new Word();
             rs2.set(this.Rs2);
             Word instruction = opCode.or(rd.leftShift(5)).or(rs2.leftShift(14))

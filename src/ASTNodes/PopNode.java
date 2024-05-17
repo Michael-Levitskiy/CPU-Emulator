@@ -1,3 +1,7 @@
+package ASTNodes;
+
+import DataTypes.*;
+
 public class PopNode extends StatementNode{
     
     //////////////////////////////

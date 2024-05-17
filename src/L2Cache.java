@@ -1,3 +1,5 @@
+import DataTypes.*;
+
 public class L2Cache {
     //////////////////////////////
     // Class Instance Variables //
