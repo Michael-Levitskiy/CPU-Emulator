@@ -9,7 +9,7 @@ public class LexerTest {
      */
     @Test
     void testLex() throws Exception {
-        Lexer lexer = new Lexer("test.txt");
+        Lexer lexer = new Lexer("src/Test.txt");
         LinkedList<Token> tokens = lexer.lex();
 
         assertEquals("COPY() 1-0", tokens.get(0).toString());

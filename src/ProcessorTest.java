@@ -2,6 +2,10 @@ import static org.junit.Assert.assertEquals;
 import org.junit.jupiter.api.Test;
 import DataTypes.*;
 
+/*
+ * NOTE: Each test passes when run individually
+ */
+
 public class ProcessorTest {
     @Test
     void testRun1() throws Exception {
@@ -157,7 +161,7 @@ public class ProcessorTest {
         Word r5 = processor.getReg(5);
         Word r6 = processor.getReg(6);
         assertEquals(r1.getSigned(), r2.getSigned());
-        assertEquals(0, r4.getSigned());        // Note to self: pretty sure should be 25*
+        assertEquals(25, r4.getSigned());
         assertEquals(0, r5.getSigned());
         assertEquals(9, r6.getSigned());
     }

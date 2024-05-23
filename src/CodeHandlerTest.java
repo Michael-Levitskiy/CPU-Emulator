@@ -10,7 +10,7 @@ public class CodeHandlerTest {
      */
     @Test
     void testPeek() throws Exception {
-        CodeHandler codeHandler = new CodeHandler("Test.txt");
+        CodeHandler codeHandler = new CodeHandler("src/Test.txt");
         
         char x = codeHandler.Peek(0);
         assertEquals('C', x);

@@ -6,7 +6,7 @@ import ASTNodes.*;
 public class ParserTest {
     @Test
     void testParse() throws Exception {
-        Lexer lexer = new Lexer("Test.txt");
+        Lexer lexer = new Lexer("src/Test.txt");
         Parser parser = new Parser(lexer.lex());
         StatementsNode nodes = parser.parse();
 
